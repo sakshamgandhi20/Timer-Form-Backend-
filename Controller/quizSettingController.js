@@ -4,7 +4,7 @@ const quizSettings = require("../Modal/quizSettings");
 
 function doFetchQuizSetting(req,resp){
     quizSettings.findOne({key:"merababa"})
-    .then((result)=>{
+    .then((result)=>{ 
         if(!result){
             resp.json({ status : false , error : "server error"});
         }
@@ -12,23 +12,24 @@ function doFetchQuizSetting(req,resp){
             resp.json({status : true , result:result});
         }
     })
-    .catch((error)=> resp.json({error:error,status: false}))
+    .catch((error)=>{  
+        resp.json({error:error,status: false})})
 }
 
 function doUpdateQuizSetting(req, resp) {
-    console.log("Received request body:", req.body);
+    // console.log("Received request body:", req.body);
 
     const update = {
         formUrl: req.body.formUrl,
         timerDuration: req.body.timerDuration,
     };
 
-    console.log("Updating with data:", update);
+    // console.log("Updating with data:", update);
 
     quizSettings.updateOne({ key: "merababa" }, { $set: update })
         .then((result) => {
-            console.log("Acknowledged:", result.acknowledged);
-            console.log("Matched Count:", result.matchedCount);
+            // console.log("Acknowledged:", result.acknowledged);
+            // console.log("Matched Count:", result.matchedCount);
             
             if (result.matchedCount) {
                 resp.json({ status: true, message: "Settings saved" });
@@ -37,16 +38,16 @@ function doUpdateQuizSetting(req, resp) {
             }
         })
         .catch((error) => {
-            console.error("Update Error:", error);
+            // console.error("Update Error:", error);
             resp.json({ status: false, error: error });
         });
 }
  function doverifyPassword(req,resp){
-    // console.log(req.query)
+    console.log(req.body)
     passModal.findOne({key:"merababa3"})
     .then((result)=>{
-        // console.log(result)
-        if(result.pass===req.query.pass){
+        console.log(result)
+        if(result.pass===req.body.pass){
             resp.json({status: true,message:"login Successfully"})
         }
         else resp.json({status : false, error: "Wrong password" })
@@ -68,6 +69,7 @@ function doUpdateQuizSetting(req, resp) {
     })
     .catch((error)=> resp.json({error:error,status: false}))
 }
+
 
 function doUpdateQuizInstructions(req, resp) {
     console.log("Received request body:", req.body);
@@ -91,8 +93,15 @@ function doUpdateQuizInstructions(req, resp) {
 }
 
 async function doFetchAllAdminSettings(req,resp){
-    const settings = await doFetchQuizSetting();
-    const instructions = await doFetchQuizInstructions();
+    try{
+    const settings = await quizSettings.findOne({key:"merababa"})
+    const instructions = await quizInstructionModal.findOne({})
+
+    resp.json({status:true, settings:settings,instructions:instructions})
+}
+catch(error){
+    resp.json({error:error,status:false})
+}
 }
 
 
@@ -104,5 +113,6 @@ module.exports = {
     doUpdateQuizSetting,
     doverifyPassword,
     doFetchQuizInstructions,
-    doUpdateQuizInstructions
+    doUpdateQuizInstructions,
+    doFetchAllAdminSettings
 }
