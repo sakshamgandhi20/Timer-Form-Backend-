@@ -43,10 +43,10 @@ function doUpdateQuizSetting(req, resp) {
         });
 }
  function doverifyPassword(req,resp){
-    console.log(req.body)
+    // console.log(req.body)
     passModal.findOne({key:"merababa3"})
     .then((result)=>{
-        console.log(result)
+        // console.log(result)
         if(result.pass===req.body.pass){
             resp.json({status: true,message:"login Successfully"})
         }
