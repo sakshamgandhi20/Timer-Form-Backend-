@@ -72,13 +72,13 @@ function doUpdateQuizSetting(req, resp) {
 
 
 function doUpdateQuizInstructions(req, resp) {
-    console.log("Received request body:", req.body);
+    // console.log("Received request body:", req.body);
 
 
     quizInstructionModal.updateOne({ key: "merababa2" }, { $set: {instructions:req.body.instructions} })
         .then((result) => {
-            console.log("Acknowledged:", result.acknowledged);
-            console.log("Matched Count:", result.matchedCount);
+            // console.log("Acknowledged:", result.acknowledged);
+            // console.log("Matched Count:", result.matchedCount);
             
             if (result.matchedCount) {
                 resp.json({ status: true, message: "Settings saved" });
@@ -87,10 +87,10 @@ function doUpdateQuizInstructions(req, resp) {
             }
         })
         .catch((error) => {
-            console.error("Update Error:", error);
+            // console.error("Update Error:", error);
             resp.json({ status: false, error: error });
         });
-}
+}  
 
 async function doFetchAllAdminSettings(req,resp){
     try{
